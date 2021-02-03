@@ -12,6 +12,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -48,8 +49,12 @@ public class HibernateConfig {
     }
 
     @Bean
-    public EntityManager entityManager(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
-        return entityManagerFactory.getObject().createEntityManager();
+    public EntityManager entityManager(LocalContainerEntityManagerFactoryBean entityManagerFactoryBean) {
+        EntityManagerFactory entityManagerFactory = entityManagerFactoryBean.getObject();
+        if (entityManagerFactory == null) {
+            throw new RuntimeException("Error during create entity manager");
+        }
+        return entityManagerFactory.createEntityManager();
     }
 
     @Bean

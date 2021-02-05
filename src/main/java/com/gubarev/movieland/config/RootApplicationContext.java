@@ -7,5 +7,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan(value = "com.gubarev.movieland", excludeFilters = @ComponentScan.Filter(type = FilterType.REGEX,
         pattern = "com.gubarev.movieland.web.*"))
 @EnableScheduling
+@PropertySource("classpath:application.properties")
 public class RootApplicationContext {
 }

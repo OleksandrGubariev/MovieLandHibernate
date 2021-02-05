@@ -1,0 +1,4 @@
+<dataset>
+    <USERROLE id="1" role="ADMIN"/>
+    <USERROLE id="2" role="USER"/>
+</dataset>

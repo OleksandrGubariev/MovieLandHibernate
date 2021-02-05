@@ -1,0 +1,11 @@
+<dataset>
+    <MOVIE_COUNTRY countryId="2" movieId = "2" />
+    <MOVIE_COUNTRY countryId="3" movieId = "2" />
+
+    <MOVIE_COUNTRY countryId="1" movieId = "3" />
+    <MOVIE_COUNTRY countryId="2" movieId = "4" />
+    <MOVIE_COUNTRY countryId="3" movieId = "5" />
+
+    <MOVIE_COUNTRY countryId="1" movieId = "1" />
+    <MOVIE_COUNTRY countryId="3" movieId = "1" />
+</dataset>

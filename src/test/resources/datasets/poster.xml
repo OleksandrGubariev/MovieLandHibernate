@@ -1,0 +1,10 @@
+<dataset>
+    <POSTER id="1" link="http1" movieId="1"/>
+    <POSTER id="2" link="http2" movieId="1"/>
+    <POSTER id="3" link="http3" movieId="2"/>
+    <POSTER id="4" link="http4" movieId="2"/>
+
+    <POSTER id="5" link="http5" movieId="3"/>
+    <POSTER id="6" link="http6" movieId="4"/>
+    <POSTER id="7" link="http7" movieId="5"/>
+</dataset>

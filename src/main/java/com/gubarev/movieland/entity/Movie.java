@@ -8,10 +8,11 @@ import java.util.List;
 
 @Data
 @Builder
-@NoArgsConstructor
+@EqualsAndHashCode(exclude = "genres")
+@ToString(exclude = "genres")
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "movie")
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

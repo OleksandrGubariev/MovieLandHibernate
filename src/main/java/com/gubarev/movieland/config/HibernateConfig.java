@@ -4,21 +4,13 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@PropertySource("classpath:application.properties")
-@EnableTransactionManagement
 public class HibernateConfig {
 
     @Bean
@@ -48,27 +40,11 @@ public class HibernateConfig {
         return entityManagerFactory;
     }
 
-    @Bean
-    public EntityManager entityManager(LocalContainerEntityManagerFactoryBean entityManagerFactoryBean) {
-        EntityManagerFactory entityManagerFactory = entityManagerFactoryBean.getObject();
-        if (entityManagerFactory == null) {
-            throw new RuntimeException("Error during create entity manager");
-        }
-        return entityManagerFactory.createEntityManager();
-    }
-
-    @Bean
-    public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
-        JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory.getObject());
-
-        return transactionManager;
-    }
-
     private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty(
                 "hibernate.dialect", "org.hibernate.dialect.PostgreSQL10Dialect");
+        hibernateProperties.setProperty("hibernate.generate_statistics", "true");
         hibernateProperties.setProperty("hibernate.show_sql", "true");
         hibernateProperties.setProperty("hibernate.cache.use_second_level_cache", "true");
         hibernateProperties.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");

@@ -2,7 +2,6 @@ package com.gubarev.movieland.dao.jpa;
 
 import com.gubarev.movieland.dao.GenreRepository;
 import com.gubarev.movieland.entity.Genre;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
@@ -14,10 +13,9 @@ import java.util.List;
 
 @Slf4j
 @Repository
-@RequiredArgsConstructor
 public class JpaGenreRepository implements GenreRepository {
     @PersistenceContext
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public List<Genre> findAll() {

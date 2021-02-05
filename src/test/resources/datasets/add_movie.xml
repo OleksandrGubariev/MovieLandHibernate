@@ -1,0 +1,26 @@
+<dataset>
+    <MOVIE id="1" nameRussian="Начало" nameNative="Inception" year="2010"
+           description="Кобб — талантливый вор." rating="8.6" price="130.00"/>
+
+    <MOVIE id="2" nameRussian="Жизнь прекрасна" nameNative="La vita è bella" year="1997"
+           description="Во время II Мировой войны в Италии в концлагерь были отправлены евреи"
+           rating="8.2" price="145.99"/>
+
+    <MOVIE id="3" nameRussian="Форрест Гамп" nameNative="Forrest Gump" year="1994"
+           description="От лица главного героя Форреста Гампа"
+           rating="8.6" price="200.60"/>
+
+    <MOVIE id="4" nameRussian="Список Шиндлера" nameNative="Schindler''s List" year="1993"
+           description="Фильм рассказывает реальную историю загадочного Оскара Шиндлер"
+           rating="8.7" price="150.50"/>
+
+    <MOVIE id="5" nameRussian="1+1" nameNative="Intouchables" year="2011"
+           description="Пострадав в результате несчастного случая, богатый аристократ Филипп нанимает в помощники человека"
+           rating="8.3" price="120.00"/>
+
+    <MOVIE id="6" nameRussian="Бойцовский клуб" nameNative="Fight Club" year="1999"
+           rating="0.00" description="Терзаемый хронической бессонницей" price="119.99"/>
+</dataset>
+
+
+

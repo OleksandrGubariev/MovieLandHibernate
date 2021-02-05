@@ -6,13 +6,12 @@ import lombok.*;
 import javax.persistence.*;
 
 @Data
+@Builder
 @EqualsAndHashCode(exclude = "movie")
 @ToString(exclude = "movie")
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "poster")
 public class Poster {
     @ManyToOne
     @JoinColumn(name = "movieId", nullable = false)
@@ -20,7 +19,6 @@ public class Poster {
     private Movie movie;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private String link;
 }

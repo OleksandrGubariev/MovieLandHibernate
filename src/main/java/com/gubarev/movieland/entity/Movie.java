@@ -2,20 +2,17 @@ package com.gubarev.movieland.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
-@Builder
 @EqualsAndHashCode(exclude = "genres")
 @ToString(exclude = "genres")
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private String nameRussian;
     private String nameNative;
@@ -27,6 +24,7 @@ public class Movie {
     @JsonManagedReference
     private List<Poster> posters;
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     @ManyToMany
     @JoinTable(
             name = "movie_genre",

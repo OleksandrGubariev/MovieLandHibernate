@@ -19,6 +19,7 @@ public class JpaGenreRepository implements GenreRepository {
 
     @Override
     public List<Genre> findAll() {
+        log.info("Getting all genres from database");
         return entityManager.createQuery("FROM Genre g", Genre.class)
                 .setHint("org.hibernate.cacheable", true)
                 .getResultList();
@@ -28,8 +29,8 @@ public class JpaGenreRepository implements GenreRepository {
     @Scheduled(initialDelayString = "${genre.cache.renewal.period}",
             fixedRateString = "${genre.cache.renewal.period}")
     public void invalidateGenreCache() {
-        log.info("Start created genre cache");
+        log.info("Start invalidating genres cache");
         findAll();
-        log.info("End created genre cache");
+        log.info("Invalidating genres cache completed");
     }
 }

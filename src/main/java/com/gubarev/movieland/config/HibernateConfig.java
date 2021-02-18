@@ -4,13 +4,17 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
+@EnableTransactionManagement
 public class HibernateConfig {
 
     @Bean
@@ -18,10 +22,10 @@ public class HibernateConfig {
                                     @Value("${jdbc.user}") String login,
                                     @Value("${jdbc.password}") String password,
                                     @Value("${jdbc.driver:org.postgresql.Driver}") String driverClassName,
-                                    @Value("${connections.amount:10}") int initialSize) {
+                                    @Value("${max.pool.size:10}") int maxPoolSize) {
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setDriverClassName(driverClassName);
-        dataSource.setMaximumPoolSize(initialSize);
+        dataSource.setMaximumPoolSize(maxPoolSize);
         dataSource.setJdbcUrl(url);
         dataSource.setUsername(login);
         dataSource.setPassword(password);
@@ -38,6 +42,15 @@ public class HibernateConfig {
         entityManagerFactory.setJpaVendorAdapter(vendorAdapter);
         entityManagerFactory.setJpaProperties(hibernateProperties());
         return entityManagerFactory;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean entityManagerFactory) {
+        JpaTransactionManager transactionManager
+                = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(
+                entityManagerFactory.getObject());
+        return transactionManager;
     }
 
     private Properties hibernateProperties() {

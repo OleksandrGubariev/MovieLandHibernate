@@ -2,29 +2,25 @@
     <USERS id="1"
             name="Рональд Рейнольдс"
             email="ronald.reynolds66@example.com"
-            password="7f7f7c8c6ebd0c4c6c15f92dad4bc2b34c67f15ee53c234df75c83e676f1d0afdbe726bd23e03875f66ac3abca649b6eeb9fe93c98154a1c6d9d1b56d8772c59"
-            salt="7c1d5b19-38c5-43ae-8b55-a03d6d61ca1f"
+            password="$2a$10$EAPxJZoDOUwxvCilsSl39.Y844zPaSljhNhlbzoSQGSF/Z3ey.q16"
             userRoleId="2"/>
 
     <USERS id="2"
             name="Дарлин Эдвардс"
             email="darlene.edwards15@example.com"
-            password="59ce4f283977e7b5475777930083a0af8b1b888fadddc599343ccdaa8247edbf5fcbf5c9fea7eb878ee44bfd65ab99e47c4793fc7437f18e15be462bf7183121"
-            salt="6085aa2c-9454-42d3-a03f-9b856e3ee796"
+            password="$2a$10$eSYOdTUlWcHsq0FKyu8JL.lBIEEDL60nXTZB/jyVluryGTqWTjWs6"
             userRoleId="2"/>
 
     <USERS id="3"
             name="Габриэль Джексон"
             email="gabriel.jackson91@example.com"
-            password="88cc39c3d7f2203f50749f5687a1a620bb53d877786abd1e49d1f347bdc7466330aebe3a0179e51798e35b87ef2b90f9b9e36115b2fdf794528582229a626f14"
-            salt="87d37b9f-d89e-401f-ab3e-2916f93a9ca4"
+            password="$2a$10$OvEnkjbh4h9iPnrxG8T9Y.F5DgB//pp/iSdBUc30W/uTpK500nZPK"
             userRoleId="2"/>
 
     <USERS id="4"
            name="admin"
            email="admin.admin@example.com"
-           password="33275a8aa48ea918bd53a9181aa975f15ab0d0645398f5918a006d08675c1cb27d5c645dbd084eee56e675e25ba4019f2ecea37ca9e2995b49fcb12c096a032e"
-           salt="1"
+           password="$2a$10$/.7PC8z9cTBqeEDMSkaq2eLeQxeAecdeInrSbO5FXkcakk/wWCNh."
            userRoleId="1"/>
 
 </dataset>

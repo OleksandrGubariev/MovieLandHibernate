@@ -6,11 +6,9 @@ import lombok.*;
 import javax.persistence.*;
 
 @Data
-@Builder
+@NoArgsConstructor
 @EqualsAndHashCode(exclude = "movie")
 @ToString(exclude = "movie")
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Poster {
     @ManyToOne
@@ -21,4 +19,9 @@ public class Poster {
     @Id
     private long id;
     private String link;
+
+    public Poster(long id, String link) {
+        this.id = id;
+        this.link = link;
+    }
 }

@@ -23,27 +23,29 @@ public class JpaMovieRepository implements MovieRepository {
     @Value("${count.random.movies:3}")
     private int countRandomMovies;
 
+
     @Override
     public List<Movie> findAll(MovieRequest movieRequest) {
+        log.info("Getting all movies from database");
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Movie> criteriaQuery = criteriaBuilder.createQuery(Movie.class);
         Root<Movie> root = criteriaQuery.from(Movie.class);
         root.fetch("posters", JoinType.LEFT);
         Order order = createSortQuery(movieRequest, criteriaBuilder, root);
         criteriaQuery.select(root).distinct(true).orderBy(order);
-        log.info("Get all movie");
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
     @Override
     public List<Movie> findRandom() {
-        log.info("Get random movies");
+        log.info("Getting :{} random movies from database", countRandomMovies);
         return entityManager.createQuery("FROM Movie m JOIN FETCH m.posters ORDER BY random()", Movie.class)
                 .setMaxResults(countRandomMovies).getResultList();
     }
 
     @Override
     public List<Movie> findByGenre(long id, MovieRequest movieRequest) {
+        log.info("Getting movies from database by genre with id: {}", id);
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Movie> criteriaQuery = criteriaBuilder.createQuery(Movie.class);
         Root<Movie> root = criteriaQuery.from(Movie.class);
@@ -53,25 +55,28 @@ public class JpaMovieRepository implements MovieRepository {
         criteriaQuery.select(root)
                 .distinct(true)
                 .where(criteriaBuilder.equal(genreJoin.get("id"), id)).orderBy(order);
-        log.info("Get movies by genre with id: {}", id);
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
     private Order createSortQuery(MovieRequest movieRequest, CriteriaBuilder criteriaBuilder, Root<Movie> root) {
         if (movieRequest.getRatingSortParameter() != null) {
             if (SortParameterType.DESC == movieRequest.getRatingSortParameter()) {
+                log.info("Sorting movies by desc rating");
                 return criteriaBuilder.desc(root.get("rating"));
             }
         }
         if (movieRequest.getPriceSortParameter() != null) {
             if (SortParameterType.DESC == movieRequest.getPriceSortParameter()) {
+                log.info("Sorting movies by desc price");
                 return criteriaBuilder.desc(root.get("price"));
             }
 
             if (SortParameterType.ACS == movieRequest.getPriceSortParameter()) {
+                log.info("Sorting movies by acs price");
                 return criteriaBuilder.asc(root.get("price"));
             }
         }
+        log.info("Sorting movies by id");
         return criteriaBuilder.asc(root.get("id"));
     }
 }

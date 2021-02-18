@@ -6,12 +6,15 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
+@NoArgsConstructor
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Genre {
     @Id
     private long id;
     private String genre;
+    public Genre(long id, String genre){
+        this.id=id;
+        this.genre = genre;
+    }
 }

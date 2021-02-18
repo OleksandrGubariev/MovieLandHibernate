@@ -1,4 +1,4 @@
-package com.gubarev.movieland.controller
+package com.gubarev.movieland.web.controller
 
 import com.github.database.rider.core.api.configuration.DBUnit
 import com.github.database.rider.core.api.configuration.Orthography

@@ -8,7 +8,6 @@
  name VARCHAR(50) NOT NULL,
  email VARCHAR(50) UNIQUE NOT NULL,
  password TEXT NOT NULL,
- salt TEXT NOT NULL,
  userRoleId INTEGER NOT NULL,
  CONSTRAINT FK_UserRole FOREIGN KEY (userRoleId) REFERENCES userrole(id)
  );

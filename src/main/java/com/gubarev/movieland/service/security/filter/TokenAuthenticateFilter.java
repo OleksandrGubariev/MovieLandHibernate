@@ -1,10 +1,11 @@
-package com.gubarev.movieland.security.jwt;
+package com.gubarev.movieland.service.security.filter;
 
-import com.gubarev.movieland.security.user.CustomUserDetailsService;
-import lombok.RequiredArgsConstructor;
+import com.gubarev.movieland.service.security.impl.JwtTokenService;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -16,23 +17,29 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
-public class JwtFilter extends GenericFilterBean {
+@AllArgsConstructor
+public class TokenAuthenticateFilter extends GenericFilterBean {
+
     private static final String AUTHORIZATION = "Authorization";
-    private final JwtProvider jwtProvider;
-    private final CustomUserDetailsService customUserDetailsService;
+    private final UserDetailsService userDetailsService;
+    private final JwtTokenService jwtTokenService;
+
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
-        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        String token = httpServletRequest.getHeader(AUTHORIZATION);
-        if (token != null && jwtProvider.validateToken(token)) {
-            String userLogin = jwtProvider.getLoginFromToken(token);
-            UserDetails customUserDetails = customUserDetailsService.loadUserByUsername(userLogin);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        String token = request.getHeader(AUTHORIZATION);
+        if (token != null&& jwtTokenService.validateToken(token)) {
+            String login = jwtTokenService.getLoginFromToken(token);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(login);
+            UsernamePasswordAuthenticationToken
+                    auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }
+
+
+
+

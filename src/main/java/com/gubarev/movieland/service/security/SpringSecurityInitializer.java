@@ -1,4 +1,4 @@
-package com.gubarev.movieland.security;
+package com.gubarev.movieland.service.security;
 
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;

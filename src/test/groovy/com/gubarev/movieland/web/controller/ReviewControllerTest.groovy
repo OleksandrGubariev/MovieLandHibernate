@@ -9,8 +9,7 @@ import com.github.database.rider.junit5.api.DBRider
 import com.gubarev.movieland.common.request.AddReviewRequest
 import com.gubarev.movieland.config.RootApplicationContext
 import com.gubarev.movieland.dao.TestConfiguration
-import com.gubarev.movieland.security.jwt.JwtProvider
-import com.gubarev.movieland.security.user.CustomUserDetailsService
+import com.gubarev.movieland.service.security.impl.JwtTokenService
 import groovy.util.logging.Slf4j
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
@@ -39,10 +39,10 @@ class ReviewControllerTest {
     private ReviewController reviewController
 
     @Autowired
-    private JwtProvider jwtProvider;
+    private JwtTokenService jwtTokenService;
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService
+    private UserDetailsService userDetailsService
 
     @Autowired
     private WebApplicationContext context
@@ -61,9 +61,10 @@ class ReviewControllerTest {
         def review = new AddReviewRequest(1, "Огонь")
         ObjectMapper mapper = new ObjectMapper()
         String json = mapper.writeValueAsString(review)
-        String token = jwtProvider.generateToken("ronald.reynolds66@example.com")
-        UserDetails customUserDetails = customUserDetailsService.loadUserByUsername("ronald.reynolds66@example.com")
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+        String token = jwtTokenService.generateToken("ronald.reynolds66@example.com")
+        UserDetails customUserDetails = userDetailsService.loadUserByUsername("ronald.reynolds66@example.com")
+        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(customUserDetails,
+                null, customUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
 
         mockMvc.perform(post("/review")

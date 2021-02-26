@@ -1,4 +1,4 @@
-package com.gubarev.movieland.security.user;
+package com.gubarev.movieland.service.security.user;
 
 import com.gubarev.movieland.entity.User;
 import com.gubarev.movieland.service.UserService;
@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailsService implements UserDetailsService {
+public class DefaultUserDetailsService implements UserDetailsService {
     private final UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.findByLogin(username);
-        return CustomUserDetails.fromUserEntityToCustomUserDetails(user);
+        return DefaultUserDetails.fromUserEntityToCustomUserDetails(user);
     }
 }

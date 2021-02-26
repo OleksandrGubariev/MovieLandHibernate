@@ -2,7 +2,6 @@ package com.gubarev.movieland.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Generated;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

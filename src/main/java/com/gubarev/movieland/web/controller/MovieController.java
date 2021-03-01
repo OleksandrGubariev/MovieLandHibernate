@@ -35,7 +35,7 @@ public class MovieController {
 
     @GetMapping(value = "/movies/random")
     public List<MovieDto> getRandomMovies() {
-        List<Movie> movies = movieService.findRandom();
+        List<Movie> movies =  movieService.findRandom();
         return movies.stream()
                 .map(movieMapper::movieToMovieDto)
                 .collect(Collectors.toList());
@@ -50,7 +50,7 @@ public class MovieController {
         movieRequest.setRatingSortParameter(ratingSortParameter);
         movieRequest.setPriceSortParameter(priceSortParameter);
 
-        List<Movie> movies = movieService.findByGenre(id, movieRequest);
+       List<Movie> movies =  movieService.findByGenre(id, movieRequest);
         return movies.stream()
                 .map(movieMapper::movieToMovieDto)
                 .collect(Collectors.toList());

@@ -27,7 +27,8 @@ public class Review {
     private long userId;
     private String comment;
 
-    public Review(long movieId, long userId, String comment) {
+    public Review(long id, long movieId, long userId, String comment) {
+        this.id = id;
         this.movieId = movieId;
         this.userId = userId;
         this.comment = comment;

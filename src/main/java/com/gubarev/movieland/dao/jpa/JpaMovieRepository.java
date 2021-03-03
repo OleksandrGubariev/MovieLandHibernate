@@ -58,6 +58,17 @@ public class JpaMovieRepository implements MovieRepository {
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
+
+    @Override
+    public Movie findById(long id) {
+        log.info("Getting movie by id {} from database", id);
+        return entityManager.createQuery("from Movie m " +
+                "LEFT JOIN FETCH m.posters " +
+                " WHERE m.id =:id ", Movie.class)
+                .setParameter("id", id)
+                .getSingleResult();
+    }
+
     private Order createSortQuery(MovieRequest movieRequest, CriteriaBuilder criteriaBuilder, Root<Movie> root) {
         if (movieRequest.getRatingSortParameter() != null) {
             if (SortParameterType.DESC == movieRequest.getRatingSortParameter()) {

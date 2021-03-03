@@ -1,15 +1,14 @@
 package com.gubarev.movieland.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Data
-@EqualsAndHashCode(exclude = "genres")
-@ToString(exclude = "genres")
 @Entity
 public class Movie {
     @Id
@@ -20,6 +19,7 @@ public class Movie {
     private String description;
     private double rating;
     private double price;
+
     @OneToMany(mappedBy = "movie")
     @JsonManagedReference
     private List<Poster> posters;
@@ -31,4 +31,15 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movieId"),
             inverseJoinColumns = @JoinColumn(name = "genreId"))
     private List<Genre> genres;
+
+    @ManyToMany
+    @JoinTable(
+            name = "movie_country",
+            joinColumns = @JoinColumn(name = "movieId"),
+            inverseJoinColumns = @JoinColumn(name = "countryId"))
+    private List<Country> countries;
+
+    @OneToMany(mappedBy = "movie")
+    @JsonManagedReference
+    private List<Review> reviews;
 }

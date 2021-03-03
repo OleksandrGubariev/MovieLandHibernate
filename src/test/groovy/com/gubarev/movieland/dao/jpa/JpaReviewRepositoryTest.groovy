@@ -28,9 +28,12 @@ class JpaReviewRepositoryTest {
 
     @Test
     @ExpectedDataSet("add_review.xml")
-    void "add review" () {
+    void "add review"() {
         //prepare
-        def review = new Review(1, 1, "Огонь")
+        def review = new Review()
+        review.setMovieId(1)
+        review.setUserId(1)
+        review.setComment("Огонь")
 
         //when
         reviewRepository.add(review)

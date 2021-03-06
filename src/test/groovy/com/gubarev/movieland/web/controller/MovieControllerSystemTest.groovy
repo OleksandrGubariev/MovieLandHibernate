@@ -1,28 +1,39 @@
 package com.gubarev.movieland.web.controller
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.database.rider.core.api.configuration.DBUnit
 import com.github.database.rider.core.api.configuration.Orthography
 import com.github.database.rider.core.api.dataset.DataSet
+import com.github.database.rider.core.api.dataset.ExpectedDataSet
 import com.github.database.rider.junit5.api.DBRider
+import com.gubarev.movieland.common.request.AddMovieRequest
+import com.gubarev.movieland.common.request.EditMovieRequest
 import com.gubarev.movieland.config.RootApplicationContext
 import com.gubarev.movieland.dao.TestConfiguration
+import com.gubarev.movieland.service.security.filter.TokenAuthenticateFilter
+import com.gubarev.movieland.service.security.impl.JwtTokenService
 import com.gubarev.movieland.web.controller.MovieController
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
 @DBRider
 @DBUnit(caseSensitiveTableNames = false, caseInsensitiveStrategy = Orthography.LOWERCASE)
-@SpringJUnitWebConfig(value = [TestConfiguration.class, RootApplicationContext.class, com.gubarev.movieland.web.WebApplicationContext])
+@SpringJUnitWebConfig(value = [TestConfiguration.class, RootApplicationContext.class, com.gubarev.movieland.web.WebApplicationContext.class])
 @DataSet(value = ["movie.xml", "country.xml", "movie_country.xml", "movie_genre.xml", "poster.xml", "user_role.xml",
-        "users.xml", "review.xml"])
+        "users.xml", "review.xml"],
+        executeStatementsBefore = "SELECT setval('movie_id_seq', 5);SELECT setval('poster_id_seq', 7);")
 class MovieControllerSystemTest {
 
     @Autowired
@@ -169,6 +180,114 @@ class MovieControllerSystemTest {
                 .andExpect(jsonPath('$[1].year').value(1994))
                 .andExpect(jsonPath('$[1].rating').value(8.6d))
                 .andExpect(jsonPath('$[1].price').value(200.60d))
+    }
+
+    @Test
+    void "get movie by id"() {
+        //then
+        mockMvc.perform(get("/movie/{id}", 1L))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath('$.id').value(1))
+                .andExpect(jsonPath('$.nameRussian').value('Начало'))
+                .andExpect(jsonPath('$.nameNative').value('Inception'))
+                .andExpect(jsonPath('$.year').value(2010))
+                .andExpect(jsonPath('$.description').value("Кобб — талантливый вор."))
+                .andExpect(jsonPath('$.rating').value(8.6d))
+                .andExpect(jsonPath('$.price').value(130.00d))
+                .andExpect(jsonPath('$.posters.size()').value(2))
+                .andExpect(jsonPath('$.posters[0].id').value(1))
+                .andExpect(jsonPath('$.posters[0].link').value('http1'))
+                .andExpect(jsonPath('$.posters[1].id').value(2))
+                .andExpect(jsonPath('$.posters[1].link').value('http2'))
+                .andExpect(jsonPath('$.genres.size()').value(2))
+                .andExpect(jsonPath('$.genres[0].id').value(1))
+                .andExpect(jsonPath('$.genres[0].genre').value('драма'))
+                .andExpect(jsonPath('$.genres[1].id').value(2))
+                .andExpect(jsonPath('$.genres[1].genre').value('комедия'))
+                .andExpect(jsonPath('$.countries.size()').value(2))
+                .andExpect(jsonPath('$.countries[0].id').value(1))
+                .andExpect(jsonPath('$.countries[0].country').value('США'))
+                .andExpect(jsonPath('$.countries[1].id').value(2))
+                .andExpect(jsonPath('$.countries[1].country').value('Великобритания'))
+                .andExpect(jsonPath('$.reviews.size()').value(2))
+                .andExpect(jsonPath('$.reviews[0].id').value(1))
+                .andExpect(jsonPath('$.reviews[0].comment').value('Гениальное кино! Смотришь и думаешь «Так не бывает!», но позже понимаешь, что только так и должно быть. Начинаешь заново осмысливать значение фразы, которую постоянно используешь в своей жизни, «Надежда умирает последней». Ведь если ты не надеешься, то все в твоей жизни гаснет, не остается смысла. Фильм наполнен бесконечным числом правильных афоризмов. Я уверена, что буду пересматривать его сотни раз.'))
+                .andExpect(jsonPath('$.reviews[1].id').value(2))
+                .andExpect(jsonPath('$.reviews[1].comment').value('Кино это является, безусловно, «со знаком качества». Что же до первого места в рейтинге, то, думаю, здесь имело место быть выставление «десяточек» от большинства зрителей вкупе с раздутыми восторженными откликами кинокритиков. Фильм атмосферный. Он драматичный. И, конечно, заслуживает того, чтобы находиться довольно высоко в мировом кинематографе.'))
+                .andExpect(jsonPath('$.reviews[0].user.id').value(2))
+                .andExpect(jsonPath('$.reviews[0].user.name').value('Дарлин Эдвардс'))
+                .andExpect(jsonPath('$.reviews[1].user.id').value(3))
+                .andExpect(jsonPath('$.reviews[1].user.name').value('Габриэль Джексон'))
+    }
+
+    @Test
+    @ExpectedDataSet("add_movie.xml, add_movie_genre.xml, add_movie_country.xml, add_poster.xml")
+    void "add movie"() {
+        //prepare
+        def movie = new AddMovieRequest()
+        movie.setNameRussian("Бойцовский клуб")
+        movie.setNameNative("Fight Club")
+        movie.setDescription("Терзаемый хронической бессонницей")
+        movie.setYear(1999)
+        movie.setPrice(119.99)
+
+        List<String> posters = new ArrayList<>()
+        posters.add("http8")
+        posters.add("http9")
+        movie.setPosters(posters)
+
+        List<Long> genres = new ArrayList<>()
+        genres.add(1L)
+        genres.add(2L)
+        movie.setGenres(genres)
+
+        List<Long> countries = new ArrayList<>()
+        countries.add(1L)
+        countries.add(2L)
+        movie.setCountries(countries)
+
+        ObjectMapper mapper = new ObjectMapper()
+        String json = mapper.writeValueAsString(movie)
+
+        mockMvc.perform(post("/movie")
+                .contentType(APPLICATION_JSON_VALUE)
+                .accept(APPLICATION_JSON_VALUE)
+                .content(json))
+                .andExpect(status().isOk())
+    }
+
+    @Test
+    @ExpectedDataSet("edit_movie.xml, edit_movie_genre.xml, edit_movie_country.xml, edit_poster.xml")
+    void "edit movie"() {
+        //prepare
+        def movie = new EditMovieRequest()
+        movie.setNameRussian("Новое Имя")
+        movie.setNameNative("New name")
+
+        List<String> posters = new ArrayList<>()
+        posters.add("http3")
+        posters.add("http4")
+        movie.setPosters(posters)
+
+        List<Long> genres = new ArrayList<>()
+        genres.add(1L)
+        genres.add(3L)
+        movie.setGenres(genres)
+
+        List<Long> countries = new ArrayList<>()
+        countries.add(1L)
+        countries.add(3L)
+        movie.setCountries(countries)
+
+        ObjectMapper mapper = new ObjectMapper()
+        String json = mapper.writeValueAsString(movie)
+
+        mockMvc.perform(put("/movie/1")
+                .contentType(APPLICATION_JSON_VALUE)
+                .accept(APPLICATION_JSON_VALUE)
+                .content(json))
+                .andExpect(status().isOk())
     }
 }
 

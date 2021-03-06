@@ -16,6 +16,8 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 public class HibernateConfig {
+    @Value("${batch.size:5}")
+    private String batchSize;
 
     @Bean
     protected DataSource dataSource(@Value("${jdbc.url}") String url,
@@ -62,6 +64,7 @@ public class HibernateConfig {
         hibernateProperties.setProperty("hibernate.cache.use_second_level_cache", "true");
         hibernateProperties.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
         hibernateProperties.setProperty("hibernate.cache.use_query_cache", "true");
+        hibernateProperties.setProperty("hibernate.jdbc.batch_size", batchSize);
         return hibernateProperties;
     }
 }

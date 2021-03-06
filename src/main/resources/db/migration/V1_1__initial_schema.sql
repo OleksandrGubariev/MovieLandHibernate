@@ -34,9 +34,9 @@ create table genre(
 
  create table poster(
  id SERIAL PRIMARY KEY,
- movieId INTEGER NOT NULL,
+ movie_id INTEGER NOT NULL,
  link TEXT NOT NULL,
- CONSTRAINT FK_MoviId FOREIGN KEY (movieId) REFERENCES movie(id)
+ CONSTRAINT FK_MoviId FOREIGN KEY (movie_id) REFERENCES movie(id)
  );
 
 

@@ -8,6 +8,7 @@ import com.gubarev.movieland.entity.Movie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -68,6 +69,21 @@ public class JpaMovieRepository implements MovieRepository {
                 .setParameter("id", id)
                 .getSingleResult();
     }
+
+    @Override
+    @Transactional
+    public void addMovie(Movie movie) {
+        log.info("Start adding movie to database");
+        entityManager.persist(movie);
+    }
+
+    @Override
+    @Transactional
+    public void editMovie(Movie movie) {
+        log.info("Start updating movie by id : {}", movie.getId());
+        entityManager.merge(movie);
+    }
+
 
     private Order createSortQuery(MovieRequest movieRequest, CriteriaBuilder criteriaBuilder, Root<Movie> root) {
         if (movieRequest.getRatingSortParameter() != null) {

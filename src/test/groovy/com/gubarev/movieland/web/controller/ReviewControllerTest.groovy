@@ -9,6 +9,7 @@ import com.github.database.rider.junit5.api.DBRider
 import com.gubarev.movieland.common.request.AddReviewRequest
 import com.gubarev.movieland.config.RootApplicationContext
 import com.gubarev.movieland.dao.TestConfiguration
+import com.gubarev.movieland.service.security.filter.TokenAuthenticateFilter
 import com.gubarev.movieland.service.security.impl.JwtTokenService
 import groovy.util.logging.Slf4j
 import org.junit.jupiter.api.BeforeEach
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -39,7 +41,7 @@ class ReviewControllerTest {
     private ReviewController reviewController
 
     @Autowired
-    private JwtTokenService jwtTokenService;
+    private JwtTokenService jwtTokenService
 
     @Autowired
     private UserDetailsService userDetailsService
@@ -51,7 +53,7 @@ class ReviewControllerTest {
 
     @BeforeEach
     void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build()
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build()
     }
 
     @Test
@@ -64,8 +66,8 @@ class ReviewControllerTest {
         String token = jwtTokenService.generateToken("ronald.reynolds66@example.com")
         UserDetails customUserDetails = userDetailsService.loadUserByUsername("ronald.reynolds66@example.com")
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(customUserDetails,
-                null, customUserDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(auth);
+                null, customUserDetails.getAuthorities())
+        SecurityContextHolder.getContext().setAuthentication(auth)
 
         mockMvc.perform(post("/review")
                 .header("Authorization", token)
@@ -87,6 +89,6 @@ class ReviewControllerTest {
                 .contentType(APPLICATION_JSON_VALUE)
                 .accept(APPLICATION_JSON_VALUE)
                 .content(json))
-                .andExpect(status().isUnauthorized())
+                .andExpect(status().isForbidden())
     }
 }

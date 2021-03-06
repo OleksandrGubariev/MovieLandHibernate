@@ -58,7 +58,7 @@ public class JwtTokenService {
         return claims.getSubject();
     }
 
-    public boolean addLogoutSessionToken(String token) {
+    boolean addLogoutSessionToken(String token) {
         return logoutSessionTokens.add(token);
     }
 }

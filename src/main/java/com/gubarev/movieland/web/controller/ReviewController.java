@@ -2,8 +2,9 @@ package com.gubarev.movieland.web.controller;
 
 import com.gubarev.movieland.common.request.AddReviewRequest;
 import com.gubarev.movieland.entity.Review;
-import com.gubarev.movieland.service.security.user.DefaultUserDetails;
+import com.gubarev.movieland.entity.User;
 import com.gubarev.movieland.service.ReviewService;
+import com.gubarev.movieland.service.security.user.DefaultUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,13 +23,12 @@ public class ReviewController {
     @PostMapping(value = "/review", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addReview(@RequestBody AddReviewRequest addReviewRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
         Object principal = authentication.getPrincipal();
-        long id = ((DefaultUserDetails) principal).getId();
+        DefaultUserDetails userDetails = (DefaultUserDetails) principal;
+        User user = new User();
+        user.setId(userDetails.getId());
         Review review = new Review();
-        review.setUserId(id);
+        review.setUser(user);
         review.setMovieId(addReviewRequest.getMovieId());
         review.setComment(addReviewRequest.getComment());
         reviewService.add(review);

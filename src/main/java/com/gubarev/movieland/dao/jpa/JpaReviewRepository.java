@@ -17,10 +17,5 @@ public class JpaReviewRepository implements ReviewRepository {
     @Override
     public void add(Review review) {
         entityManager.persist(review);
-//        entityManager.createQuery("INSERT INTO Review (movieId, userID, comment) VALUES (?, ?, ?)")
-//                .setParameter(1, review.getMovieId())
-//                .setParameter(2, review.getUserId())
-//                .setParameter(3, review.getComment())
-//                .executeUpdate();
     }
 }

@@ -12,11 +12,11 @@ import javax.persistence.*;
 @Entity
 public class Poster {
     @ManyToOne
-    @JoinColumn(name = "movieId", nullable = false)
     @JsonBackReference
     private Movie movie;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String link;
 

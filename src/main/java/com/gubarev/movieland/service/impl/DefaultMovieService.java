@@ -1,7 +1,10 @@
 package com.gubarev.movieland.service.impl;
 
 import com.gubarev.movieland.common.MovieRequest;
+import com.gubarev.movieland.common.dto.MovieByIdDto;
 import com.gubarev.movieland.common.dto.MovieDto;
+import com.gubarev.movieland.common.request.AddMovieRequest;
+import com.gubarev.movieland.common.request.EditMovieRequest;
 import com.gubarev.movieland.dao.MovieRepository;
 import com.gubarev.movieland.entity.Movie;
 import com.gubarev.movieland.service.MovieService;
@@ -47,8 +50,24 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
-    public Movie findById(long id) {
+    public MovieByIdDto findById(long id) {
         Movie movie = movieRepository.findById(id);
-        return movieMapper.movieJpaToMovie(movie);
+        return movieMapper.movieToMovieByIdDto(movie);
     }
+
+    @Override
+    @Transactional
+    public void addMovie(AddMovieRequest addMovieRequest) {
+        Movie movie = movieMapper.addMovieDtoToMovie(addMovieRequest);
+        movieRepository.addMovie(movie);
+    }
+
+    @Override
+    @Transactional
+    public void editMovie(EditMovieRequest editMovieRequest, long id) {
+        Movie movie = movieMapper.editMovieDtoToMovie(editMovieRequest);
+        movie.setId(id);
+        movieRepository.editMovie(movie);
+    }
+
 }

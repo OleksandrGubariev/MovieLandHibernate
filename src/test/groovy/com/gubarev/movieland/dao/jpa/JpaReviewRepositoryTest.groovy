@@ -9,6 +9,7 @@ import com.gubarev.movieland.config.RootApplicationContext
 import com.gubarev.movieland.dao.ReviewRepository
 import com.gubarev.movieland.dao.TestConfiguration
 import com.gubarev.movieland.entity.Review
+import com.gubarev.movieland.entity.User
 import com.gubarev.movieland.web.WebApplicationContext
 import groovy.util.logging.Slf4j
 import org.junit.jupiter.api.Test
@@ -24,15 +25,17 @@ import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig
         "users.xml", "review.xml"], executeStatementsBefore = "SELECT setval('review_id_seq', 3);")
 class JpaReviewRepositoryTest {
     @Autowired
-    private ReviewRepository reviewRepository;
+    private ReviewRepository reviewRepository
 
     @Test
     @ExpectedDataSet("add_review.xml")
     void "add review"() {
         //prepare
+        def user = new User()
+        user.setId(1L)
         def review = new Review()
         review.setMovieId(1)
-        review.setUserId(1)
+        review.setUser(user)
         review.setComment("Огонь")
 
         //when

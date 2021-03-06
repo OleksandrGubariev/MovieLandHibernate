@@ -3,6 +3,7 @@ package com.gubarev.movieland.dao.jpa
 import com.github.database.rider.core.api.configuration.DBUnit
 import com.github.database.rider.core.api.configuration.Orthography
 import com.github.database.rider.core.api.dataset.DataSet
+import com.github.database.rider.core.api.dataset.ExpectedDataSet
 import com.github.database.rider.junit5.api.DBRider
 import com.gubarev.movieland.common.MovieRequest
 import com.gubarev.movieland.config.RootApplicationContext
@@ -22,13 +23,14 @@ import org.springframework.transaction.annotation.Transactional
 @DBUnit(caseSensitiveTableNames = false, caseInsensitiveStrategy = Orthography.LOWERCASE)
 @SpringJUnitWebConfig(value = [TestConfiguration.class, RootApplicationContext.class, WebApplicationContext.class])
 @DataSet(value = ["movie.xml", "country.xml", "movie_country.xml", "movie_genre.xml", "poster.xml", "user_role.xml",
-        "users.xml", "review.xml"])
-@Transactional
+        "users.xml", "review.xml"],
+        executeStatementsBefore = "SELECT setval('movie_id_seq', 5);SELECT setval('poster_id_seq', 7);")
 class JpaMovieRepositoryITest {
     @Autowired
     private MovieRepository movieRepository
 
     @Test
+    @Transactional
     void "test get all movies count select"() {
         //prepare
         def movie1 = new Movie()
@@ -137,6 +139,7 @@ class JpaMovieRepositoryITest {
     }
 
     @Test
+    @Transactional
     void "test get random movies"() {
         //when
         def actualMovies = movieRepository.findRandom()
@@ -146,6 +149,7 @@ class JpaMovieRepositoryITest {
     }
 
     @Test
+    @Transactional
     void "test get movies by genre"() {
         //prepare
         def movie1 = new Movie()
@@ -210,6 +214,7 @@ class JpaMovieRepositoryITest {
     }
 
     @Test
+    @Transactional
     void "test get movie by id"() {
         def expectedMovie = new Movie()
         expectedMovie.setId(1)
@@ -238,9 +243,13 @@ class JpaMovieRepositoryITest {
         countries.add(country1)
         countries.add(country2)
         expectedMovie.setCountries(countries)
+        User user1 = new User(2, "Дарлин Эдвардс", "darlene.edwards15@example.com",
+                "\$2a\$10\$eSYOdTUlWcHsq0FKyu8JL.lBIEEDL60nXTZB/jyVluryGTqWTjWs6", UserRole.USER)
+                User user2 = new User(3, "Габриэль Джексон", "gabriel.jackson91@example.com",
+                        "\$2a\$10\$OvEnkjbh4h9iPnrxG8T9Y.F5DgB//pp/iSdBUc30W/uTpK500nZPK", UserRole.USER)
 
-        def review1 = new Review(1,1, 2, "Гениальное кино! Смотришь и думаешь «Так не бывает!», но позже понимаешь, что только так и должно быть. Начинаешь заново осмысливать значение фразы, которую постоянно используешь в своей жизни, «Надежда умирает последней». Ведь если ты не надеешься, то все в твоей жизни гаснет, не остается смысла. Фильм наполнен бесконечным числом правильных афоризмов. Я уверена, что буду пересматривать его сотни раз.")
-        def review2 = new Review(2,1, 3, "Кино это является, безусловно, «со знаком качества». Что же до первого места в рейтинге, то, думаю, здесь имело место быть выставление «десяточек» от большинства зрителей вкупе с раздутыми восторженными откликами кинокритиков. Фильм атмосферный. Он драматичный. И, конечно, заслуживает того, чтобы находиться довольно высоко в мировом кинематографе.")
+        def review1 = new Review(1, 1, user1, "Гениальное кино! Смотришь и думаешь «Так не бывает!», но позже понимаешь, что только так и должно быть. Начинаешь заново осмысливать значение фразы, которую постоянно используешь в своей жизни, «Надежда умирает последней». Ведь если ты не надеешься, то все в твоей жизни гаснет, не остается смысла. Фильм наполнен бесконечным числом правильных афоризмов. Я уверена, что буду пересматривать его сотни раз.")
+        def review2 = new Review(2, 1, user2, "Кино это является, безусловно, «со знаком качества». Что же до первого места в рейтинге, то, думаю, здесь имело место быть выставление «десяточек» от большинства зрителей вкупе с раздутыми восторженными откликами кинокритиков. Фильм атмосферный. Он драматичный. И, конечно, заслуживает того, чтобы находиться довольно высоко в мировом кинематографе.")
         List<Review> reviews = new ArrayList<>()
         reviews.add(review1)
         reviews.add(review2)
@@ -253,6 +262,88 @@ class JpaMovieRepositoryITest {
         actualMovie.reviews.sort({ it.id })
 
         assert expectedMovie == actualMovie
+    }
+
+    @Test
+    @ExpectedDataSet("add_movie.xml, add_movie_genre.xml, add_movie_country.xml")
+    void "add movie"() {
+        //prepare
+        def movie = new Movie()
+        movie.setNameRussian("Бойцовский клуб")
+        movie.setNameNative("Fight Club")
+        movie.setDescription("Терзаемый хронической бессонницей")
+        movie.setYear(1999)
+        movie.setPrice(119.99)
+
+        def poster1 = new Poster()
+        poster1.setLink("http8")
+        def poster2 = new Poster()
+        poster2.setLink("http9")
+        List<Poster> posters1 = new ArrayList<>()
+        posters1.add(poster1)
+        posters1.add(poster2)
+        movie.setPosters(posters1)
+
+        def genre1 = new Genre()
+        genre1.setId(1)
+        def genre2 = new Genre()
+        genre2.setId(2)
+        List<Genre> genres = new ArrayList<>()
+        genres.add(genre1)
+        genres.add(genre2)
+        movie.setGenres(genres)
+
+        def country1 = new Country()
+        country1.setId(1)
+        def country2 = new Country()
+        country2.setId(2)
+        List<Country> countries = new ArrayList<>()
+        countries.add(country1)
+        countries.add(country2)
+        movie.setCountries(countries)
+
+        //when
+        movieRepository.addMovie(movie)
+    }
+
+    @Test
+    @ExpectedDataSet("edit_movie.xml, edit_movie_genre.xml, edit_movie_country.xml, edit_poster.xml, review.xml")
+    void "edit movie"() {
+        //prepare
+        def movie = new Movie()
+        movie.setId(1)
+        movie.setNameRussian("Новое Имя")
+        movie.setNameNative("New name")
+
+        def poster1 = new Poster()
+        poster1.setLink("http3")
+        def poster2 = new Poster()
+        poster2.setLink("http4")
+        List<Poster> posters = new ArrayList<>()
+        posters.add(poster1)
+        posters.add(poster2)
+        movie.setPosters(posters)
+
+        def genre1 = new Genre()
+        genre1.setId(1)
+        def genre2 = new Genre()
+        genre2.setId(3)
+        List<Genre> genres = new ArrayList<>()
+        genres.add(genre1)
+        genres.add(genre2)
+        movie.setGenres(genres)
+
+        def country1 = new Country()
+        country1.setId(1)
+        def country2 = new Country()
+        country2.setId(3)
+        List<Country> countries = new ArrayList<>()
+        countries.add(country1)
+        countries.add(country2)
+        movie.setCountries(countries)
+
+        //when
+        movieRepository.editMovie(movie)
     }
 
 }

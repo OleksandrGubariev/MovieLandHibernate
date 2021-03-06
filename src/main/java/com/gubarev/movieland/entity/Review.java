@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -24,13 +23,15 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long movieId;
-    private long userId;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
     private String comment;
 
-    public Review(long id, long movieId, long userId, String comment) {
+    public Review(long id, long movieId, User user, String comment) {
         this.id = id;
         this.movieId = movieId;
-        this.userId = userId;
+        this.user = user;
         this.comment = comment;
     }
 

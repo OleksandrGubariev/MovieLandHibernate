@@ -81,7 +81,7 @@ public class JpaMovieRepository implements MovieRepository {
     @Transactional
     public void editMovie(Movie movie) {
         log.info("Start updating movie by id : {}", movie.getId());
-        entityManager.merge(movie);
+          entityManager.merge(movie);
     }
 
 

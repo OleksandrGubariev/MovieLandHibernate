@@ -20,12 +20,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class DefaultMovieService implements MovieService {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
 
     @Override
+    @Transactional(readOnly = true)
     public List<MovieDto> findAll(MovieRequest movieRequest) {
         List<Movie> movies = movieRepository.findAll(movieRequest);
         return movies.stream()
@@ -34,6 +34,7 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MovieDto> findRandom() {
         List<Movie> movies = movieRepository.findRandom();
         return movies.stream()
@@ -42,6 +43,7 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MovieDto> findByGenre(long id, MovieRequest movieRequest) {
         List<Movie> movies = movieRepository.findByGenre(id, movieRequest);
         return movies.stream()
@@ -50,6 +52,7 @@ public class DefaultMovieService implements MovieService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public MovieByIdDto findById(long id) {
         Movie movie = movieRepository.findById(id);
         return movieMapper.movieToMovieByIdDto(movie);

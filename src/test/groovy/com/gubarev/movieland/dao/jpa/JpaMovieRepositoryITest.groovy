@@ -15,6 +15,7 @@ import com.vladmihalcea.sql.SQLStatementCountValidator
 import groovy.util.logging.Slf4j
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.test.annotation.Commit
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig
 import org.springframework.transaction.annotation.Transactional
 
@@ -30,7 +31,6 @@ class JpaMovieRepositoryITest {
     private MovieRepository movieRepository
 
     @Test
-    @Transactional
     void "test get all movies count select"() {
         //prepare
         def movie1 = new Movie()
@@ -139,7 +139,6 @@ class JpaMovieRepositoryITest {
     }
 
     @Test
-    @Transactional
     void "test get random movies"() {
         //when
         def actualMovies = movieRepository.findRandom()
@@ -149,7 +148,6 @@ class JpaMovieRepositoryITest {
     }
 
     @Test
-    @Transactional
     void "test get movies by genre"() {
         //prepare
         def movie1 = new Movie()

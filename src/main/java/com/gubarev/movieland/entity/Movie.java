@@ -3,14 +3,12 @@ package com.gubarev.movieland.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
 @Entity
-@DynamicUpdate
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +37,7 @@ public class Movie {
             inverseJoinColumns = @JoinColumn(name = "genreId"))
     private List<Genre> genres;
 
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     @ManyToMany
     @JoinTable(
             name = "movie_country",

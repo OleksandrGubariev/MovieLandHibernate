@@ -47,8 +47,15 @@ class JpaGenreRepositoryTest {
         }
 
         assert actual.size() == 0
-        SQLStatementCountValidator.assertSelectCount(0)
+
+        actual = genreRepository.findAll()
+        assert actual.size() == 4
+
+        for (genre in expected) {
+            actual.removeIf(x -> x == genre)
+        }
+
+        assert actual.size() == 0
+        SQLStatementCountValidator.assertSelectCount(1)
     }
-
-
 }

@@ -10,6 +10,8 @@ import com.gubarev.movieland.common.request.AddMovieRequest
 import com.gubarev.movieland.common.request.EditMovieRequest
 import com.gubarev.movieland.config.RootApplicationContext
 import com.gubarev.movieland.dao.TestConfiguration
+import com.gubarev.movieland.entity.Genre
+import com.gubarev.movieland.entity.Poster
 import com.gubarev.movieland.service.security.filter.TokenAuthenticateFilter
 import com.gubarev.movieland.service.security.impl.JwtTokenService
 import com.gubarev.movieland.web.controller.MovieController
@@ -196,20 +198,20 @@ class MovieControllerSystemTest {
                 .andExpect(jsonPath('$.rating').value(8.6d))
                 .andExpect(jsonPath('$.price').value(130.00d))
                 .andExpect(jsonPath('$.posters.size()').value(2))
-                .andExpect(jsonPath('$.posters[0].id').value(1))
-                .andExpect(jsonPath('$.posters[0].link').value('http1'))
-                .andExpect(jsonPath('$.posters[1].id').value(2))
-                .andExpect(jsonPath('$.posters[1].link').value('http2'))
+                .andExpect(jsonPath('$.posters[1].id').value(1))
+                .andExpect(jsonPath('$.posters[1].link').value('http1'))
+                .andExpect(jsonPath('$.posters[0].id').value(2))
+                .andExpect(jsonPath('$.posters[0].link').value('http2'))
                 .andExpect(jsonPath('$.genres.size()').value(2))
                 .andExpect(jsonPath('$.genres[0].id').value(1))
                 .andExpect(jsonPath('$.genres[0].genre').value('драма'))
                 .andExpect(jsonPath('$.genres[1].id').value(2))
                 .andExpect(jsonPath('$.genres[1].genre').value('комедия'))
                 .andExpect(jsonPath('$.countries.size()').value(2))
-                .andExpect(jsonPath('$.countries[0].id').value(1))
-                .andExpect(jsonPath('$.countries[0].country').value('США'))
-                .andExpect(jsonPath('$.countries[1].id').value(2))
-                .andExpect(jsonPath('$.countries[1].country').value('Великобритания'))
+                .andExpect(jsonPath('$.countries[1].id').value(1))
+                .andExpect(jsonPath('$.countries[1].country').value('США'))
+                .andExpect(jsonPath('$.countries[0].id').value(2))
+                .andExpect(jsonPath('$.countries[0].country').value('Великобритания'))
                 .andExpect(jsonPath('$.reviews.size()').value(2))
                 .andExpect(jsonPath('$.reviews[0].id').value(1))
                 .andExpect(jsonPath('$.reviews[0].comment').value('Гениальное кино! Смотришь и думаешь «Так не бывает!», но позже понимаешь, что только так и должно быть. Начинаешь заново осмысливать значение фразы, которую постоянно используешь в своей жизни, «Надежда умирает последней». Ведь если ты не надеешься, то все в твоей жизни гаснет, не остается смысла. Фильм наполнен бесконечным числом правильных афоризмов. Я уверена, что буду пересматривать его сотни раз.'))
@@ -232,17 +234,17 @@ class MovieControllerSystemTest {
         movie.setYear(1999)
         movie.setPrice(119.99)
 
-        List<String> posters = new ArrayList<>()
+        Set<String> posters = new LinkedHashSet<>()
         posters.add("http8")
         posters.add("http9")
         movie.setPosters(posters)
 
-        List<Long> genres = new ArrayList<>()
+        Set<Long> genres = new LinkedHashSet<>()
         genres.add(1L)
         genres.add(2L)
         movie.setGenres(genres)
 
-        List<Long> countries = new ArrayList<>()
+        Set<Long> countries = new LinkedHashSet<>()
         countries.add(1L)
         countries.add(2L)
         movie.setCountries(countries)
@@ -265,17 +267,17 @@ class MovieControllerSystemTest {
         movie.setNameRussian("Новое Имя")
         movie.setNameNative("New name")
 
-        List<String> posters = new ArrayList<>()
+        Set<String> posters = new LinkedHashSet<>()
         posters.add("http3")
         posters.add("http4")
         movie.setPosters(posters)
 
-        List<Long> genres = new ArrayList<>()
+        Set<Long> genres = new LinkedHashSet<>()
         genres.add(1L)
         genres.add(3L)
         movie.setGenres(genres)
 
-        List<Long> countries = new ArrayList<>()
+        Set<Long> countries = new LinkedHashSet<>()
         countries.add(1L)
         countries.add(3L)
         movie.setCountries(countries)

@@ -19,17 +19,17 @@ create table genre(
  );
 
  create table movie_country (
- movieId INTEGER NOT NULL,
- countryId INTEGER NOT NULL,
- CONSTRAINT FK_MovieId FOREIGN KEY (movieId) REFERENCES movie(id),
- CONSTRAINT FK_CountryId FOREIGN KEY (countryId) REFERENCES country(id)
+ movie_id INTEGER NOT NULL,
+ country_id INTEGER NOT NULL,
+ CONSTRAINT FK_MovieId FOREIGN KEY (movie_id) REFERENCES movie(id),
+ CONSTRAINT FK_CountryId FOREIGN KEY (country_id) REFERENCES country(id)
  );
 
  create table movie_genre (
- movieId INTEGER NOT NULL,
- genreId INTEGER NOT NULL,
- CONSTRAINT FK_MovieId FOREIGN KEY (movieId) REFERENCES movie(id),
- CONSTRAINT FK_GenreId FOREIGN KEY (genreId) REFERENCES genre(id)
+ movie_id INTEGER NOT NULL,
+ genre_id INTEGER NOT NULL,
+ CONSTRAINT FK_MovieId FOREIGN KEY (movie_id) REFERENCES movie(id),
+ CONSTRAINT FK_GenreId FOREIGN KEY (genre_id) REFERENCES genre(id)
  );
 
  create table poster(

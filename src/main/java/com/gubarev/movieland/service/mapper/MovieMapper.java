@@ -14,8 +14,7 @@ import com.gubarev.movieland.service.mapper.annotation.StringToPoster;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -38,29 +37,29 @@ public interface MovieMapper {
     Movie editMovieDtoToMovie(EditMovieRequest editMovieRequest);
 
     @StringToPoster
-    default List<Poster> stringToPoster(List<String> posters) {
+    default Set<Poster> stringToPoster(Set<String> posters) {
         return posters.stream()
                 .map(poster -> new Poster(0, poster))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @LongToGenre
-    default List<Genre> longToGenre(List<Long> genres) {
+    default Set<Genre> longToGenre(Set<Long> genres) {
         return genres.stream()
                 .map(genreId -> new Genre(genreId, null))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @LongToCountry
-    default List<Country> longToCountry(List<Long> countries) {
+    default Set<Country> longToCountry(Set<Long> countries) {
         return countries.stream()
                 .map(countryId -> new Country(countryId, null))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @ReviewToReviewDto
-    default List<ReviewDto> reviewToReviewDto(List<Review> reviews) {
-        List<ReviewDto> reviewDtoList = new ArrayList<>();
+    default Set<ReviewDto> reviewToReviewDto(Set<Review> reviews) {
+        Set<ReviewDto> reviewDtoList = new TreeSet<>(Comparator.comparing(ReviewDto::getId));
         for (Review review : reviews) {
             User user = review.getUser();
             UserDto userDto = new UserDto(user.getId(), user.getName());

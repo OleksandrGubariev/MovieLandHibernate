@@ -64,8 +64,12 @@ public class JpaMovieRepository implements MovieRepository {
     public Movie findById(long id) {
         log.info("Getting movie by id {} from database", id);
         return entityManager.createQuery("from Movie m " +
-                "LEFT JOIN FETCH m.posters " +
-                " WHERE m.id =:id ", Movie.class)
+                "INNER JOIN FETCH m.posters " +
+                "INNER JOIN FETCH m.genres " +
+                "INNER JOIN FETCH m.countries " +
+                "INNER JOIN FETCH m.reviews r " +
+                "INNER JOIN FETCH r.user u " +
+                "WHERE m.id =:id ", Movie.class)
                 .setParameter("id", id)
                 .getSingleResult();
     }

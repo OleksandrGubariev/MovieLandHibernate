@@ -1,8 +1,10 @@
 package com.gubarev.movieland.common.request;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -13,7 +15,7 @@ public class AddMovieRequest {
     private int year;
     private String description;
     private double price;
-    private List<String> posters;
-    private List<Long> countries;
-    private List<Long> genres;
+    private Set<String> posters;
+    private Set<Long> countries;
+    private Set<Long> genres;
 }

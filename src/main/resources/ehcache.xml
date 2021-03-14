@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+    <defaultCache maxEntriesLocalHeap="50"
+                  eternal="false"
+                  timeToIdleSeconds="300"
+                  timeToLiveSeconds="600">
+    </defaultCache>
+    <cache name="com.gubarev.movieland.entity.Genre"
+           maxEntriesLocalHeap="50"
+           eternal="false"
+           timeToIdleSeconds="300"
+           timeToLiveSeconds="600"
+    />
+</ehcache>

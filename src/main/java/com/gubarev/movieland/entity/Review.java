@@ -15,16 +15,17 @@ import javax.persistence.*;
 @ToString(exclude = "movie")
 public class Review {
     @ManyToOne
-    @JoinColumn(name = "movieId", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "movie_id", nullable = false, insertable = false, updatable = false)
     @JsonBackReference
     private Movie movie;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(name = "movie_id")
     private long movieId;
+
     @ManyToOne
-    @JoinColumn(name = "userId")
     private User user;
     private String comment;
 

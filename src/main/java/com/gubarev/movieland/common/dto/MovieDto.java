@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -17,5 +17,5 @@ public class MovieDto {
     private int year;
     private double rating;
     private double price;
-    private List<Poster> posters;
+    private Set<Poster> posters;
 }

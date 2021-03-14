@@ -3,9 +3,11 @@ package com.gubarev.movieland.common.dto;
 import com.gubarev.movieland.entity.Country;
 import com.gubarev.movieland.entity.Genre;
 import com.gubarev.movieland.entity.Poster;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -18,8 +20,8 @@ public class MovieByIdDto {
     private String description;
     private double rating;
     private double price;
-    private List<Poster> posters;
-    private List<Country> countries;
-    private List<Genre> genres;
-    private List<ReviewDto> reviews;
+    private Set<Poster> posters;
+    private Set<Country> countries;
+    private Set<Genre> genres;
+    private Set<ReviewDto> reviews;
 }

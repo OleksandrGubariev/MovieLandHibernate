@@ -152,6 +152,7 @@
             <artifactId>hibernate-ehcache</artifactId>
             <version>5.4.28.Final</version>
         </dependency>
+
         <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>

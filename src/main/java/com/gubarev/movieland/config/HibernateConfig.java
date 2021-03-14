@@ -63,10 +63,12 @@ public class HibernateConfig {
         hibernateProperties.setProperty("hibernate.show_sql", "true");
         hibernateProperties.setProperty("hibernate.cache.use_second_level_cache", "true");
         hibernateProperties.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
+
         hibernateProperties.setProperty("hibernate.cache.use_query_cache", "true");
         hibernateProperties.setProperty("hibernate.order_inserts", "true");
         hibernateProperties.setProperty("hibernate.order_updates", "true");
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", batchSize);
+
         return hibernateProperties;
     }
 }

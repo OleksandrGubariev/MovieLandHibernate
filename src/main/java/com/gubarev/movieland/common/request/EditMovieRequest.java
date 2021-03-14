@@ -1,8 +1,10 @@
 package com.gubarev.movieland.common.request;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 
 @Data
@@ -11,7 +13,7 @@ import java.util.List;
 public class EditMovieRequest {
     private String nameRussian;
     private String nameNative;
-    private List<String> posters;
-    private List<Long> countries;
-    private List<Long> genres;
+    private Set<String> posters;
+    private Set<Long> countries;
+    private Set<Long> genres;
 }

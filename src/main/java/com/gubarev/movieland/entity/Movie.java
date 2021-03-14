@@ -3,12 +3,14 @@ package com.gubarev.movieland.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
+@DynamicUpdate
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,29 +29,29 @@ public class Movie {
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "movie", orphanRemoval = true)
     @JsonManagedReference
-    private List<Poster> posters;
+    private Set<Poster> posters;
 
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     @ManyToMany
     @JoinTable(
             name = "movie_genre",
-            joinColumns = @JoinColumn(name = "movieId"),
-            inverseJoinColumns = @JoinColumn(name = "genreId"))
-    private List<Genre> genres;
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "genre")
+    private Set<Genre> genres;
 
-    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
     @ManyToMany
     @JoinTable(
             name = "movie_country",
-            joinColumns = @JoinColumn(name = "movieId"),
-            inverseJoinColumns = @JoinColumn(name = "countryId"))
-    private List<Country> countries;
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "country_id"))
+    @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "genre")
+    private Set<Country> countries;
 
     @OneToMany(mappedBy = "movie")
     @JsonManagedReference
-    private List<Review> reviews;
+    private Set<Review> reviews;
 
-    public void setPosters(List<Poster> posters) {
+    public void setPosters(Set<Poster> posters) {
         for (Poster poster : posters) {
             poster.setMovie(this);
         }

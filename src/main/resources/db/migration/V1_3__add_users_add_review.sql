@@ -14,9 +14,9 @@
 
  create table review(
  id SERIAL PRIMARY KEY,
- movieId INTEGER NOT NULL,
- userId INTEGER NOT NULL,
+ movie_id INTEGER NOT NULL,
+ user_id INTEGER NOT NULL,
  comment TEXT NOT NULL,
- CONSTRAINT FK_MovieId FOREIGN KEY (movieId) REFERENCES movie(id),
- CONSTRAINT FK_UserId FOREIGN KEY (userId) REFERENCES users(id)
+ CONSTRAINT FK_MovieId FOREIGN KEY (movie_id) REFERENCES movie(id),
+ CONSTRAINT FK_UserId FOREIGN KEY (user_id) REFERENCES users(id)
  );

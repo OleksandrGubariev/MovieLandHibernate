@@ -1,13 +1,13 @@
 <dataset>
-    <MOVIE_GENRE genreId="1" movieId = "1" />
-    <MOVIE_GENRE genreId="2" movieId = "1" />
-    <MOVIE_GENRE genreId="2" movieId = "2" />
-    <MOVIE_GENRE genreId="3" movieId = "2" />
+    <MOVIE_GENRE genre_id="1" movie_id = "1" />
+    <MOVIE_GENRE genre_id="2" movie_id = "1" />
+    <MOVIE_GENRE genre_id="2" movie_id = "2" />
+    <MOVIE_GENRE genre_id="3" movie_id = "2" />
 
-    <MOVIE_GENRE genreId="1" movieId = "3" />
-    <MOVIE_GENRE genreId="2" movieId = "4" />
-    <MOVIE_GENRE genreId="3" movieId = "5" />
+    <MOVIE_GENRE genre_id="1" movie_id = "3" />
+    <MOVIE_GENRE genre_id="2" movie_id = "4" />
+    <MOVIE_GENRE genre_id="3" movie_id = "5" />
 
-    <MOVIE_GENRE genreId="1" movieId = "6" />
-    <MOVIE_GENRE genreId="2" movieId = "6" />
+    <MOVIE_GENRE genre_id="1" movie_id = "6" />
+    <MOVIE_GENRE genre_id="2" movie_id = "6" />
 </dataset>

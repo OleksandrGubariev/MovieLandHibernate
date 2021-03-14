@@ -10,7 +10,7 @@ import javax.persistence.Id;
 @Data
 @Entity
 @NoArgsConstructor
-@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "genre")
 public class Genre {
     @Id
     private long id;

@@ -11,6 +11,7 @@ import com.gubarev.movieland.entity.Genre
 import com.gubarev.movieland.web.WebApplicationContext
 import com.vladmihalcea.sql.SQLStatementCountValidator
 import groovy.util.logging.Slf4j
+import net.sf.ehcache.CacheManager
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig
@@ -58,4 +59,14 @@ class JpaGenreRepositoryTest {
         assert actual.size() == 0
         SQLStatementCountValidator.assertSelectCount(1)
     }
+
+    @Test
+    void "test for L2C"() {
+        genreRepository.findAll()
+
+        def size = CacheManager.ALL_CACHE_MANAGERS.get(0)
+                .getCache("genre").getSize()
+        assert size > 0
+    }
 }
+

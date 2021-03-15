@@ -2,13 +2,11 @@
 <ehcache>
     <defaultCache maxEntriesLocalHeap="50"
                   eternal="false"
-                  timeToIdleSeconds="300"
-                  timeToLiveSeconds="600">
+                  timeToLiveSeconds="14400000">
     </defaultCache>
-    <cache name="com.gubarev.movieland.entity.Genre"
+    <cache name="genre"
            maxEntriesLocalHeap="50"
            eternal="false"
-           timeToIdleSeconds="300"
-           timeToLiveSeconds="600"
-    />
+           timeToLiveSeconds="14400000"/>
 </ehcache>
+

@@ -16,8 +16,10 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 public class HibernateConfig {
-    @Value("${batch.size:5}")
+    @Value("${batch.size:10}")
     private String batchSize;
+    @Value("${fetch.size:10}")
+    private String fetchSize;
 
     @Bean
     protected DataSource dataSource(@Value("${jdbc.url}") String url,
@@ -68,6 +70,7 @@ public class HibernateConfig {
         hibernateProperties.setProperty("hibernate.order_inserts", "true");
         hibernateProperties.setProperty("hibernate.order_updates", "true");
         hibernateProperties.setProperty("hibernate.jdbc.batch_size", batchSize);
+        hibernateProperties.setProperty("hibernate.jdbc.fetch_size", fetchSize);
 
         return hibernateProperties;
     }

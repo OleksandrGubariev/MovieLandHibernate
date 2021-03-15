@@ -21,8 +21,6 @@ import java.util.stream.Collectors;
 public interface MovieMapper {
     MovieDto movieToMovieDto(Movie movie);
 
-    Movie movieJpaToMovie(Movie movie);
-
     @Mapping(target = "reviews", qualifiedBy = ReviewToReviewDto.class)
     MovieByIdDto movieToMovieByIdDto(Movie movie);
 
@@ -47,14 +45,14 @@ public interface MovieMapper {
     default Set<Genre> longToGenre(Set<Long> genres) {
         return genres.stream()
                 .map(genreId -> new Genre(genreId, null))
-                .collect(Collectors.toCollection(LinkedHashSet::new));
+                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparingLong(Genre::getId))));
     }
 
     @LongToCountry
     default Set<Country> longToCountry(Set<Long> countries) {
         return countries.stream()
                 .map(countryId -> new Country(countryId, null))
-                .collect(Collectors.toCollection(LinkedHashSet::new));
+                .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparingLong(Country::getId))));
     }
 
     @ReviewToReviewDto
